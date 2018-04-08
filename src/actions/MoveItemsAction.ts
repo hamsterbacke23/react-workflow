@@ -6,7 +6,5 @@ export class MoveItemsAction extends BaseAction {
   constructor(mouseX: number, mouseY: number) {
     super(mouseX, mouseY);
     this.moved = false;
-
-    // var selectedItems = diagramEngine.getDiagramModel().getSelectedItems();
   }
 }

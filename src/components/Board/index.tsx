@@ -2,42 +2,79 @@ import * as React from 'react';
 import { BoardProps } from './index';
 import { BaseComponent, BaseComponentProps } from '../../BaseComponent';
 import { BaseAction } from '../../actions/BaseAction';
+import { MoveItemsAction } from '../../actions/MoveItemsAction';
+import { RootState } from '../../reducer';
+import { connect } from 'react-redux';
+import { nodeActions } from './actions';
 
 export interface BoardProps extends BaseComponentProps {
-  actionStartedFiring?: Function;
+  move: Function;
 }
 
-class Board extends BaseComponent<BoardProps> {
+export interface BoardState {
+  action: BaseAction;
+  id: string;
+}
+
+class Board extends BaseComponent<BoardProps, BoardState> {
+  state = {
+    action: new BaseAction(0, 0),
+    id: ''
+  };
+
   constructor(props: BoardProps) {
     super(props);
   }
 
-  startFiringAction(action: BaseAction) {
-    this.setState({ action: action });
-  }
+  getMouseElement(event: any) {
+    window.console.log('getmouselement');
+    const element = event.target as Element;
 
-  getMouseElement(event: object) {
+    if (element) {
+      return element;
+    }
     return null;
   }
 
-  handleElement(element: Element) {
+  initMovingElement(element: Element, event: any) {
+    const container = element.closest('.node[data-id]');
+    if (container) {
+      const id = container.getAttribute('data-id');
+      const action = new MoveItemsAction(event.clientX, event.clientY);
+      if (id) {
+        this.setState({ action, id });
+      }
+    }
+
     return null;
   }
 
   onMouseDown = (event: any) => {
-    window.console.log(event.clientX, event.clientY);
     // Decide what is clicked
     const element = this.getMouseElement(event);
+
     if (element) {
       // TODO: if element is a valid board element, react here
-      this.handleElement(element);
+      this.initMovingElement(element, event);
     }
   };
 
   onMouseMove = (event: any) => {
-    window.console.log(event.clientX, event.clientY);
+    if (this.state.action instanceof MoveItemsAction) {
+      const amountX = event.clientX - this.state.action.mouseX;
+      const amountY = event.clientY - this.state.action.mouseY;
+      if (this.state.id) {
+        this.props.move(this.state.id, amountX, amountY);
+      }
+    }
 
     return null;
+  };
+
+  onMouseUp = (event: any) => {
+    if (this.state.action) {
+      this.setState({ action: new BaseAction(0, 0) });
+    }
   };
 
   render() {
@@ -46,6 +83,7 @@ class Board extends BaseComponent<BoardProps> {
         style={{ backgroundColor: '#eee', minHeight: '1000px' }}
         onMouseDown={this.onMouseDown}
         onMouseMove={this.onMouseMove}
+        onMouseUp={this.onMouseUp}
       >
         {this.props.children}
       </div>
@@ -53,4 +91,9 @@ class Board extends BaseComponent<BoardProps> {
   }
 }
 
-export default Board;
+const mapDispatchToProps = (dispatch: any) => ({
+  move: (id: string, x: number, y: number) =>
+    dispatch(nodeActions.moveItem(id, x, y))
+});
+
+export default connect<void, BoardProps>(null, mapDispatchToProps)(Board);

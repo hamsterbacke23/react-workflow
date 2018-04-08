@@ -4,3 +4,23 @@
   height: 100px;
   background-color: #999;
 }
+
+.port {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  background-color: #fff;
+  opacity: 0.8;
+}
+
+.port-right {
+  right: -15px;
+  top: 20%;
+  transform: translateY(-50%);
+}
+
+.port-top {
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+}
