@@ -2,7 +2,8 @@
   position: absolute;
   width: 100px;
   height: 100px;
-  background-color: #999;
+  background-color: #555;
+  color: #ffd800;
 }
 
 .port {

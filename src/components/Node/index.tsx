@@ -3,25 +3,27 @@ import './style.css';
 import { BaseComponent, BaseComponentProps } from '../../BaseComponent';
 import { NodeProps } from './index';
 import Draggable, { DraggableData } from 'react-draggable';
-import { nodeActions } from './actions';
-import { connect } from 'react-redux';
 import { Port } from '../Port';
 
 export interface NodeProps extends BaseComponentProps {
   data: any;
+  onMove: Function;
 }
 
-export interface NodeDispatchProps {
-  move: Function;
-}
-
-export class Node extends BaseComponent<NodeProps & NodeDispatchProps> {
+export class Node extends BaseComponent<NodeProps> {
   ports: Array<Object> = [];
 
   onDrag = (e: any, dragData: DraggableData) => {
-    this.props.move(this.props.data.id, this.ports, dragData);
+    this.props.onMove({
+      id: this.props.data.id,
+      ports: this.ports,
+      dragData
+    });
   };
 
+  /**
+   * On initialization, save the ports of this node to a global array
+   */
   setPortPosition = (id: string, x: number, y: number) => {
     this.ports.push({ id, x, y });
   };
@@ -45,9 +47,4 @@ export class Node extends BaseComponent<NodeProps & NodeDispatchProps> {
   }
 }
 
-const mapDispatchToProps = (dispatch: any) => ({
-  move: (id: string, ports: Array<Object>, dragData: DraggableData) =>
-    dispatch(nodeActions.moveItem(id, ports, dragData))
-});
-
-export default connect<void, NodeDispatchProps>(null, mapDispatchToProps)(Node);
+export default Node;

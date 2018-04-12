@@ -24,21 +24,6 @@ class Link extends Component {
     }`;
   };
 
-  // static generateDynamicPath(pathCoords) {
-  //   let path = Path();
-  //   path = path.moveto(
-  //     pathCoords[0][0] * ROUTING_SCALING_FACTOR,
-  //     pathCoords[0][1] * ROUTING_SCALING_FACTOR
-  //   );
-  //   pathCoords.slice(1).forEach(coords => {
-  //     path = path.lineto(
-  //       coords[0] * ROUTING_SCALING_FACTOR,
-  //       coords[1] * ROUTING_SCALING_FACTOR
-  //     );
-  //   });
-  //   return path.print();
-  // }
-
   generateLinkSegment(path) {
     return (
       <path className="linkPath" strokeWidth="0.5" stroke="#222" d={path} />
