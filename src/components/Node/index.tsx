@@ -4,6 +4,7 @@ import { BaseComponent, BaseComponentProps } from '../../BaseComponent';
 import { NodeProps } from './index';
 import Draggable, { DraggableData } from 'react-draggable';
 import { Port } from '../Port';
+import * as icons from 'octicons';
 
 export interface NodeProps extends BaseComponentProps {
   data: any;
@@ -19,6 +20,7 @@ export class Node extends BaseComponent<NodeProps> {
       ports: this.ports,
       dragData
     });
+    e.stopPropagation();
   };
 
   /**
@@ -29,11 +31,21 @@ export class Node extends BaseComponent<NodeProps> {
   };
 
   render() {
-    const { x, y, id, ports } = this.props.data;
+    const { x, y, id, ports, level, icon } = this.props.data;
 
     return (
       <Draggable onDrag={this.onDrag} defaultPosition={{ x, y }}>
         <div className="node" data-id={id}>
+          <div className="title">
+            Task <span className="level">(Level {level})</span>
+          </div>
+
+          <svg
+            viewBox="0 0 16 16"
+            dangerouslySetInnerHTML={{
+              __html: icons[icon].path
+            }}
+          />
           {ports.map((port: object, index: number) => (
             <Port
               key={`port-${index}`}

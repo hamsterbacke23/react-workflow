@@ -21,9 +21,10 @@ export class Port extends BaseComponent<PortProps> {
 
   render() {
     return (
-      <div className={this.props.data.name} ref={el => (this.ref = el)}>
-        {this.props.data.name}
-      </div>
+      <div
+        className={`port port-${this.props.data.name}`}
+        ref={el => (this.ref = el)}
+      />
     );
   }
 }

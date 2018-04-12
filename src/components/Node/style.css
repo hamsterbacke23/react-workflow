@@ -6,22 +6,55 @@
   color: #ffd800;
 }
 
+.node .title {
+  margin-top: 10px;
+  display: block;
+  text-align: center;
+  color: #ffd800;
+}
+
+.node .level {
+  font-size: 11px;
+}
+
+.node svg {
+  fill: #ffd800;
+  position: absolute;
+  left: 50%;
+  top: 55%;
+  transform: translateX(-50%) translateY(-50%);
+  height: 40%;
+  width: 40%;
+}
+
 .port {
   position: absolute;
-  width: 30px;
-  height: 30px;
+  width: 20px;
+  height: 20px;
   background-color: #fff;
   opacity: 0.8;
 }
 
 .port-right {
-  right: -15px;
-  top: 20%;
+  right: -10px;
+  top: 50%;
   transform: translateY(-50%);
 }
 
 .port-top {
-  top: -15px;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.port-left {
+  left: -10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.port-bottom {
+  bottom: -10px;
   left: 50%;
   transform: translateX(-50%);
 }
