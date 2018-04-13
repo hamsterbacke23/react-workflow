@@ -1,5 +1,6 @@
 .linkLayer,
 .zoomLayer {
+  overflow: visible;
   position: absolute;
   height: 100%;
   width: 100%;

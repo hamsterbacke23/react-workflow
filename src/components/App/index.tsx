@@ -49,7 +49,6 @@ export class App extends BaseComponent<BaseComponentProps, AppState> {
     if (zoomLevel + scrollDelta > 10) {
       this.setState({ zoomLevel: zoomLevel + scrollDelta });
     }
-
     const zoomFactor = zoomLevel / 100;
 
     const boundingRect = event.currentTarget.getBoundingClientRect();
@@ -123,34 +122,33 @@ export class App extends BaseComponent<BaseComponentProps, AppState> {
 
   render() {
     return (
-      <div className="board" onWheel={this.onWheel}>
+      <div className="board">
+        Zoom: {Math.round(this.state.zoomLevel) / 100}
         <Draggable>
-          <div
-            className="zoomLayer"
-            style={{
-              transform:
-                'translate(' +
-                this.state.offsetX +
-                'px,' +
-                this.state.offsetY +
-                'px) scale(' +
-                this.state.zoomLevel / 100.0 +
-                ')'
-            }}
-          >
-            <svg className="linkLayer">
-              {this.state.workflow.links.map((link: object, index: number) => (
-                <Link key={`link-${index}`} data={link} />
-              ))}
-            </svg>
+          <div onWheel={this.onWheel} className="zoomLayer">
+            <div
+              className="zoomLayer"
+              style={{
+                transform:
+                  'translate(0,0) scale(' + this.state.zoomLevel / 100.0 + ')'
+              }}
+            >
+              <svg className="linkLayer">
+                {this.state.workflow.links.map(
+                  (link: object, index: number) => (
+                    <Link key={`link-${index}`} data={link} />
+                  )
+                )}
+              </svg>
 
-            {this.state.workflow.nodes.map((node: object, index: number) => (
-              <Node
-                onMove={this.onNodeMove}
-                key={`node-${index}`}
-                data={node}
-              />
-            ))}
+              {this.state.workflow.nodes.map((node: object, index: number) => (
+                <Node
+                  onMove={this.onNodeMove}
+                  key={`node-${index}`}
+                  data={node}
+                />
+              ))}
+            </div>
           </div>
         </Draggable>
       </div>
