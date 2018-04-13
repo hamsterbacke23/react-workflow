@@ -11,7 +11,7 @@ export interface NodeProps extends BaseComponentProps {
   onMove: Function;
 }
 
-export class Node extends BaseComponent<NodeProps> {
+export class Node extends React.PureComponent<NodeProps> {
   ports: Array<Object> = [];
 
   onDrag = (e: any, dragData: DraggableData) => {
@@ -36,7 +36,6 @@ export class Node extends BaseComponent<NodeProps> {
 
   render() {
     const { x, y, id, ports, level, icon } = this.props.data;
-
     return (
       <Draggable
         onStart={this.onStart}

@@ -7,7 +7,7 @@ export interface PortProps extends BaseComponentProps {
   children?: any;
 }
 
-export class Port extends BaseComponent<PortProps> {
+export class Port extends React.PureComponent<PortProps> {
   ref: HTMLDivElement | null;
 
   componentDidMount() {
