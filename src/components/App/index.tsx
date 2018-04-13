@@ -9,11 +9,7 @@ const workflowState = require('../../state.json');
 
 export interface AppState {
   workflow: any;
-  isMoving: boolean;
   zoomLevel: number;
-  offsetX: number;
-  offsetY: number;
-  initMoveData: any;
 }
 
 export class App extends BaseComponent<BaseComponentProps, AppState> {
@@ -21,11 +17,7 @@ export class App extends BaseComponent<BaseComponentProps, AppState> {
     super(props);
     this.state = {
       workflow: workflowState,
-      zoomLevel: 100,
-      offsetX: 0,
-      offsetY: 0,
-      isMoving: false,
-      initMoveData: {}
+      zoomLevel: 100
     };
   }
 
@@ -49,28 +41,6 @@ export class App extends BaseComponent<BaseComponentProps, AppState> {
     if (zoomLevel + scrollDelta > 10) {
       this.setState({ zoomLevel: zoomLevel + scrollDelta });
     }
-    const zoomFactor = zoomLevel / 100;
-
-    const boundingRect = event.currentTarget.getBoundingClientRect();
-    const clientWidth = boundingRect.width;
-    const clientHeight = boundingRect.height;
-    // compute difference between rect before and after scroll
-    const widthDiff = clientWidth * zoomFactor - clientWidth * oldZoomFactor;
-    const heightDiff = clientHeight * zoomFactor - clientHeight * oldZoomFactor;
-    // compute mouse coords relative to canvas
-    const clientX = event.clientX - boundingRect.left;
-    const clientY = event.clientY - boundingRect.top;
-
-    // compute width and height increment factor
-    const xFactor =
-      (clientX - this.state.offsetX) / oldZoomFactor / clientWidth;
-    const yFactor =
-      (clientY - this.state.offsetY) / oldZoomFactor / clientHeight;
-
-    this.setState({
-      offsetX: this.state.offsetX - widthDiff * xFactor,
-      offsetY: this.state.offsetY - heightDiff * yFactor
-    });
   };
 
   onNodeMove = (action: any) => {
