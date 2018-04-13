@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Node from '../Node';
-
+import Draggable from 'react-draggable';
 import { BaseComponent, BaseComponentProps } from '../../BaseComponent';
 import Link from '../Link';
 import './style.css';
@@ -13,7 +13,7 @@ export interface AppState {
   zoomLevel: number;
   offsetX: number;
   offsetY: number;
-  mouseData: any;
+  initMoveData: any;
 }
 
 export class App extends BaseComponent<BaseComponentProps, AppState> {
@@ -25,7 +25,7 @@ export class App extends BaseComponent<BaseComponentProps, AppState> {
       offsetX: 0,
       offsetY: 0,
       isMoving: false,
-      mouseData: {}
+      initMoveData: {}
     };
   }
 
@@ -74,7 +74,7 @@ export class App extends BaseComponent<BaseComponentProps, AppState> {
     });
   };
 
-  onMove = (action: any) => {
+  onNodeMove = (action: any) => {
     const state = this.state;
     const newLinks = JSON.parse(JSON.stringify(state.workflow.links));
     const newNodes = state.workflow.nodes.map((node: any) => {
@@ -121,72 +121,38 @@ export class App extends BaseComponent<BaseComponentProps, AppState> {
     });
   };
 
-  onMouseMove = (event: any) => {
-    if (!this.state.isMoving) {
-      return false;
-    }
-    this.setState({
-      offsetX:
-        this.state.mouseData.initialOffsetX +
-        (event.clientX - this.state.mouseData.mouseX),
-      offsetY:
-        this.state.mouseData.initialOffsetY +
-        (event.clientY - this.state.mouseData.mouseY)
-    });
-    return true;
-  };
-
-  onMouseDown = (event: any) => {
-    this.setState({
-      isMoving: true,
-      mouseData: {
-        mouseX: event.clientX,
-        mouseY: event.clientY,
-        initialOffsetX: this.state.offsetX,
-        initialOffsetY: this.state.offsetY
-      }
-    });
-  };
-
-  onMouseUp = (eveny: any) => {
-    this.setState({
-      isMoving: false,
-      mouseData: {}
-    });
-  };
-
   render() {
     return (
-      <div
-        className="board"
-        onWheel={this.onWheel}
-        onMouseMove={this.onMouseMove}
-        onMouseDown={this.onMouseDown}
-        onMouseUp={this.onMouseUp}
-      >
-        <div
-          className="zoomLayer"
-          style={{
-            transform:
-              'translate(' +
-              this.state.offsetX +
-              'px,' +
-              this.state.offsetY +
-              'px) scale(' +
-              this.state.zoomLevel / 100.0 +
-              ')'
-          }}
-        >
-          <svg className="linkLayer">
-            {this.state.workflow.links.map((link: object, index: number) => (
-              <Link key={`link-${index}`} data={link} />
-            ))}
-          </svg>
+      <div className="board" onWheel={this.onWheel}>
+        <Draggable>
+          <div
+            className="zoomLayer"
+            style={{
+              transform:
+                'translate(' +
+                this.state.offsetX +
+                'px,' +
+                this.state.offsetY +
+                'px) scale(' +
+                this.state.zoomLevel / 100.0 +
+                ')'
+            }}
+          >
+            <svg className="linkLayer">
+              {this.state.workflow.links.map((link: object, index: number) => (
+                <Link key={`link-${index}`} data={link} />
+              ))}
+            </svg>
 
-          {this.state.workflow.nodes.map((node: object, index: number) => (
-            <Node onMove={this.onMove} key={`node-${index}`} data={node} />
-          ))}
-        </div>
+            {this.state.workflow.nodes.map((node: object, index: number) => (
+              <Node
+                onMove={this.onNodeMove}
+                key={`node-${index}`}
+                data={node}
+              />
+            ))}
+          </div>
+        </Draggable>
       </div>
     );
   }

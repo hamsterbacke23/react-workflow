@@ -23,6 +23,10 @@ export class Node extends BaseComponent<NodeProps> {
     e.stopPropagation();
   };
 
+  onStart = (e: any) => {
+    e.stopPropagation();
+  };
+
   /**
    * On initialization, save the ports of this node to a global array
    */
@@ -34,7 +38,11 @@ export class Node extends BaseComponent<NodeProps> {
     const { x, y, id, ports, level, icon } = this.props.data;
 
     return (
-      <Draggable onDrag={this.onDrag} defaultPosition={{ x, y }}>
+      <Draggable
+        onStart={this.onStart}
+        onDrag={this.onDrag}
+        defaultPosition={{ x, y }}
+      >
         <div className="node" data-id={id}>
           <div className="title">
             Task <span className="level">(Level {level})</span>
